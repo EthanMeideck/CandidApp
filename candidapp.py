@@ -31,10 +31,17 @@ class Candidapp:
         else:
             logging.warning(" The society is already in the data base.")
 
-#Retirer entreprise avec le statut associé
+    def remove_society(self):
+        states = self._get_society()
+        if self.title in states:
+            del states[self.title]
+            self._write_society(states)
+        else:
+            logging.warning(" The society is not in the data base.")
 
 #Importer depuis un fichier word ou txt
 
 if __name__ == "__main__":
     c = Candidapp("test", "en attente")
-    c.add_society()
+    # c.add_society()
+    c.remove_society()
