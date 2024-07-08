@@ -1,10 +1,12 @@
-mon_dictionnaire = {
-    "nom": "Alice",
-    "âge": 25,
-    "ville": "Paris"
-}
+from PySide2 import QtWidgets
 
-# Ajouter une nouvelle clé "pays" avec la valeur "France"
-mon_dictionnaire["pays"] = "France"
+class App(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("CandidApp")
 
-print(mon_dictionnaire)
+app = QtWidgets.QApplication([])
+win = App()
+
+win.show()
+app.exec_()

@@ -1,4 +1,3 @@
-from PySide2 import QtWidgets
 import os
 import json
 import logging
@@ -42,7 +41,7 @@ class Candidapp:
     def societys_sum(self):
         society_dict = self._get_society()
         numbers = 0
-        for society in society_dict:
+        for _ in society_dict:
             numbers += 1
         return numbers
 
