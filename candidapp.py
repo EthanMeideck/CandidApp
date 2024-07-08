@@ -24,24 +24,32 @@ class Candidapp:
             return json.dump(new_dict, f, indent=4)
         
     def add_society(self):
-        states = self._get_society()
-        if self.title not in states:
-            states[self.title] = self.status
-            self._write_society(states)
+        society_dict = self._get_society()
+        if self.title not in society_dict:
+            society_dict[self.title] = self.status
+            self._write_society(society_dict)
         else:
             logging.warning(" The society is already in the data base.")
 
     def remove_society(self):
-        states = self._get_society()
-        if self.title in states:
-            del states[self.title]
-            self._write_society(states)
+        society_dict = self._get_society()
+        if self.title in society_dict:
+            del society_dict[self.title]
+            self._write_society(society_dict)
         else:
             logging.warning(" The society is not in the data base.")
+
+    def societys_sum(self):
+        society_dict = self._get_society()
+        numbers = 0
+        for society in society_dict:
+            numbers += 1
+        return numbers
 
 #Importer depuis un fichier word ou txt
 
 if __name__ == "__main__":
     c = Candidapp("test", "en attente")
     # c.add_society()
-    c.remove_society()
+    # c.remove_society()
+    # c.societys_sum()
