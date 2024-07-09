@@ -1,4 +1,5 @@
 from PySide2 import QtWidgets, QtCore
+from candidapp import societys_sum
 
 class App(QtWidgets.QWidget):
     def __init__(self):
@@ -19,6 +20,7 @@ class App(QtWidgets.QWidget):
         self.qpb_add_layout = QtWidgets.QVBoxLayout()
         self.list_layout = QtWidgets.QHBoxLayout()
         self.qpb_remove_layout = QtWidgets.QVBoxLayout()
+        self.total_layout = QtWidgets.QHBoxLayout()
 
         #Labels
 
@@ -51,13 +53,25 @@ class App(QtWidgets.QWidget):
         self.list_status = QtWidgets.QListView()
 
         self.list_layout.addWidget(self.list_society)
-        self.list_layout.setSpacing(0)
         self.list_layout.addWidget(self.list_status)
+        self.list_layout.setSpacing(0)
 
         #QPushButton to remove items
 
         self.qpb_remove_item = QtWidgets.QPushButton("Delete the society with the status")
         self.qpb_remove_layout.addWidget(self.qpb_remove_item)
+
+
+        #Label with the total number of society
+
+        number_society = societys_sum()
+
+        self.text_total = QtWidgets.QLabel(f"You applied for {number_society} differents jobs")
+
+        self.total_layout.addWidget(self.text_total)
+
+        self.total_layout.setAlignment(QtCore.Qt.AlignBottom)
+        self.total_layout.addSpacerItem(QtWidgets.QSpacerItem(0, 30))
 
         #Adding secondary layout to the main layout
 
@@ -66,6 +80,7 @@ class App(QtWidgets.QWidget):
         self.main_layout.addLayout(self.qpb_add_layout)
         self.main_layout.addLayout(self.list_layout)
         self.main_layout.addLayout(self.qpb_remove_layout)
+        self.main_layout.addLayout(self.total_layout)
 
         self.setLayout(self.main_layout)
 
