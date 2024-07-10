@@ -1,11 +1,14 @@
 from PySide2 import QtWidgets, QtCore
-from candidapp import societys_sum
+from candidapp import societys_sum, Candidapp
+import logging
 
 class App(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("CandidApp")
         self.setup_ui()
+        self.populate_name()
+        self.populate_status()
 
     def setup_ui(self):
         """Creation of every widgets in the app
@@ -49,8 +52,8 @@ class App(QtWidgets.QWidget):
 
         #List with society and status
 
-        self.list_society = QtWidgets.QListView()
-        self.list_status = QtWidgets.QListView()
+        self.list_society = QtWidgets.QListWidget()
+        self.list_status = QtWidgets.QListWidget()
 
         self.list_layout.addWidget(self.list_society)
         self.list_layout.addWidget(self.list_status)
@@ -83,6 +86,22 @@ class App(QtWidgets.QWidget):
         self.main_layout.addLayout(self.total_layout)
 
         self.setLayout(self.main_layout)
+
+    #Add to each lists
+
+    def populate_name(self):
+        self.society_name = Candidapp._get_society(self)
+        for name in self.society_name:
+            name_list_item = QtWidgets.QListWidgetItem(name) #Create item
+            name_list_item.setData(QtCore.Qt.UserRole, name) #Setting item's data
+            self.list_society.addItem(name_list_item) #Add to the list
+
+    def populate_status(self):
+        self.status_name = Candidapp._get_society(self)
+        for status in self.status_name.values():
+            status_list_item = QtWidgets.QListWidgetItem(status)
+            status_list_item.setData(QtCore.Qt.UserRole, status)
+            self.list_status.addItem(status_list_item)
 
 app = QtWidgets.QApplication([])
 win = App()
