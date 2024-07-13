@@ -7,6 +7,7 @@ class App(QtWidgets.QWidget):
         super().__init__()
         self.setWindowTitle("CandidApp")
         self.setup_ui()
+        self.setup_connection()
         self.populate_name()
         self.populate_status()
 
@@ -102,6 +103,42 @@ class App(QtWidgets.QWidget):
             status_list_item = QtWidgets.QListWidgetItem(status)
             status_list_item.setData(QtCore.Qt.UserRole, status)
             self.list_status.addItem(status_list_item)
+
+    def add_item(self):
+        self.society_dict = Candidapp._get_society(self)
+
+
+        #Picking the text in each line edit 
+        society_text = self.le_society.text()
+        status_text = self.le_status.text()
+
+        if not society_text:
+            logging.warning(" Enter a valid society name.")
+        
+        if not status_text:
+            status_text = "Waiting"
+
+        if society_text and status_text:
+
+            #Adding the new item into the json file
+            self.society_dict[society_text] = status_text
+
+            Candidapp._write_society(self, self.society_dict)
+
+            #Add the new item into the list
+            society_text_item = QtWidgets.QListWidgetItem(society_text)
+            society_text_item.setData(QtCore.Qt.UserRole, society_text)
+            self.list_society.addItem(society_text_item)
+
+            status_text_item = QtWidgets.QListWidgetItem(status_text)
+            status_text_item.setData(QtCore.Qt.UserRole, status_text)
+            self.list_status.addItem(status_text_item)
+
+    def setup_connection(self):
+        self.qpb_add_item.clicked.connect(self.add_item)
+        self.le_society.returnPressed.connect(self.add_item)
+        self.le_status.returnPressed.connect(self.add_item)
+        
 
 app = QtWidgets.QApplication([])
 win = App()
