@@ -1,5 +1,5 @@
 from PySide2 import QtWidgets, QtCore
-from candidapp import societys_sum, Candidapp
+from candidapp import Candidapp
 import logging
 
 class App(QtWidgets.QWidget):
@@ -71,9 +71,9 @@ class App(QtWidgets.QWidget):
 
         #Label with the total number of society
 
-        number_society = societys_sum()
+        self.number_society = Candidapp.societys_sum()
 
-        self.text_total = QtWidgets.QLabel(f"You applied for {number_society} differents jobs")
+        self.text_total = QtWidgets.QLabel(f"You applied for {self.number_society} differents jobs")
 
         self.total_layout.addWidget(self.text_total)
 
@@ -135,6 +135,9 @@ class App(QtWidgets.QWidget):
                 status_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
                 self.list_status.addItem(status_text_item)
 
+                self.number_society = Candidapp.societys_sum()
+                self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+
     def remove_item(self):
         for selected_item in self.list_society.selectedItems() or self.list_status.selectedItems():
             item = selected_item.data(QtCore.Qt.UserRole)
@@ -142,6 +145,9 @@ class App(QtWidgets.QWidget):
             self.list_society.takeItem(self.list_society.row(selected_item))
             self.list_status.clear()
             self.populate_status()
+
+            self.number_society = Candidapp.societys_sum()
+            self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)

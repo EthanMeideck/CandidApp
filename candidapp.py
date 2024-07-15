@@ -5,14 +5,6 @@ import logging
 CUR_DIR = os.path.dirname(__file__)
 DATA_FILE = os.path.join(CUR_DIR, "data", "data.json")
 
-def societys_sum():
-    with open(DATA_FILE, "r") as f:
-        society_dict = json.load(f)
-    numbers = 0
-    for _ in society_dict:
-        numbers += 1
-    return numbers
-
 class Candidapp:
 
     def __init__(self, title, status):
@@ -47,6 +39,14 @@ class Candidapp:
             return True
         else:
             logging.warning(" The society is not in the data base.")
+
+    def societys_sum():
+        with open(DATA_FILE, "r") as f:
+            society_dict = json.load(f)
+        numbers = 0
+        for _ in society_dict:
+            numbers += 1
+        return numbers
 
 #Importer depuis un fichier word ou txt
 
