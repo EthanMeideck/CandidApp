@@ -35,6 +35,7 @@ class Candidapp:
         if self.title not in society_dict:
             society_dict[self.title] = self.status
             self._write_society(society_dict)
+            return True
         else:
             logging.warning(" The society is already in the data base.")
 
@@ -43,6 +44,7 @@ class Candidapp:
         if self.title in society_dict:
             del society_dict[self.title]
             self._write_society(society_dict)
+            return True
         else:
             logging.warning(" The society is not in the data base.")
 

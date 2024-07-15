@@ -56,6 +56,9 @@ class App(QtWidgets.QWidget):
         self.list_society = QtWidgets.QListWidget()
         self.list_status = QtWidgets.QListWidget()
 
+        self.list_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
+        self.list_status.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
+
         self.list_layout.addWidget(self.list_society)
         self.list_layout.addWidget(self.list_status)
         self.list_layout.setSpacing(0)
@@ -107,7 +110,6 @@ class App(QtWidgets.QWidget):
     def add_item(self):
         self.society_dict = Candidapp._get_society(self)
 
-
         #Picking the text in each line edit 
         society_text = self.le_society.text()
         status_text = self.le_status.text()
@@ -120,26 +122,34 @@ class App(QtWidgets.QWidget):
 
         if society_text and status_text:
 
-            #Adding the new item into the json file
-            self.society_dict[society_text] = status_text
+            #creating a new instance
+            self.society_instance = Candidapp(title=society_text, status=status_text)
 
-            Candidapp._write_society(self, self.society_dict)
+            #Add the new item into the list & in the json file
+            if self.society_instance.add_society():
+                society_text_item = QtWidgets.QListWidgetItem(society_text.title())
+                society_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
+                self.list_society.addItem(society_text_item)
 
-            #Add the new item into the list
-            society_text_item = QtWidgets.QListWidgetItem(society_text)
-            society_text_item.setData(QtCore.Qt.UserRole, society_text)
-            self.list_society.addItem(society_text_item)
+                status_text_item = QtWidgets.QListWidgetItem(status_text.title())
+                status_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
+                self.list_status.addItem(status_text_item)
 
-            status_text_item = QtWidgets.QListWidgetItem(status_text)
-            status_text_item.setData(QtCore.Qt.UserRole, status_text)
-            self.list_status.addItem(status_text_item)
-
+    def remove_item(self):
+        for selected_item in self.list_society.selectedItems() or self.list_status.selectedItems():
+            item = selected_item.data(QtCore.Qt.UserRole)
+            item.remove_society()
+            self.list_society.takeItem(self.list_society.row(selected_item))
+            self.list_status.clear()
+            self.populate_status()
+            
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)
         self.le_society.returnPressed.connect(self.add_item)
         self.le_status.returnPressed.connect(self.add_item)
-        
 
+        self.qpb_remove_item.clicked.connect(self.remove_item)
+        
 app = QtWidgets.QApplication([])
 win = App()
 
