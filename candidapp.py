@@ -31,16 +31,16 @@ class Candidapp:
         else:
             logging.warning(" The society is already in the data base.")
 
-    def remove_society(self):
+    def remove_society(self, title):
         society_dict = self._get_society()
-        if self.title in society_dict:
-            del society_dict[self.title]
+        if title in society_dict:
+            del society_dict[title]
             self._write_society(society_dict)
             return True
         else:
             logging.warning(" The society is not in the data base.")
 
-    def societys_sum():
+    def societys_sum(self):
         with open(DATA_FILE, "r") as f:
             society_dict = json.load(f)
         numbers = 0

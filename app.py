@@ -2,7 +2,7 @@ from PySide2 import QtWidgets, QtCore
 from candidapp import Candidapp
 import logging
 
-class App(QtWidgets.QWidget):
+class App(QtWidgets.QWidget, Candidapp):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("CandidApp")
@@ -71,7 +71,7 @@ class App(QtWidgets.QWidget):
 
         #Label with the total number of society
 
-        self.number_society = Candidapp.societys_sum()
+        self.number_society = Candidapp.societys_sum(self)
 
         self.text_total = QtWidgets.QLabel(f"You applied for {self.number_society} differents jobs")
 
@@ -116,6 +116,7 @@ class App(QtWidgets.QWidget):
 
         if not society_text:
             logging.warning(" Enter a valid society name.")
+            return False
         
         if not status_text:
             status_text = "Waiting"
@@ -135,18 +136,19 @@ class App(QtWidgets.QWidget):
                 status_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
                 self.list_status.addItem(status_text_item)
 
-                self.number_society = Candidapp.societys_sum()
+                self.number_society = Candidapp.societys_sum(self)
                 self.text_total.setText(f"You applied for {self.number_society} differents jobs")
 
     def remove_item(self):
-        for selected_item in self.list_society.selectedItems() or self.list_status.selectedItems():
+        for selected_item in self.list_society.selectedItems():
             item = selected_item.data(QtCore.Qt.UserRole)
-            item.remove_society()
+            Candidapp.remove_society(self, item)
+
             self.list_society.takeItem(self.list_society.row(selected_item))
             self.list_status.clear()
             self.populate_status()
 
-            self.number_society = Candidapp.societys_sum()
+            self.number_society = Candidapp.societys_sum(self)
             self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
     def setup_connection(self):
