@@ -23,7 +23,7 @@ class App(QtWidgets.QWidget, Candidapp):
         self.le_layout = QtWidgets.QHBoxLayout()
         self.qpb_add_layout = QtWidgets.QVBoxLayout()
         self.list_layout = QtWidgets.QHBoxLayout()
-        self.qpb_remove_layout = QtWidgets.QVBoxLayout()
+        self.qpb_remove_import_layout = QtWidgets.QVBoxLayout()
         self.total_layout = QtWidgets.QHBoxLayout()
 
         #Labels
@@ -48,7 +48,7 @@ class App(QtWidgets.QWidget, Candidapp):
         #QPushButton to add items
 
         self.qpb_add_item = QtWidgets.QPushButton("Add the society with the status")
-     
+
         self.qpb_add_layout.addWidget(self.qpb_add_item)
 
         #List with society and status
@@ -63,10 +63,13 @@ class App(QtWidgets.QWidget, Candidapp):
         self.list_layout.addWidget(self.list_status)
         self.list_layout.setSpacing(0)
 
-        #QPushButton to remove items
+        #QPushButton to remove and import items
 
         self.qpb_remove_item = QtWidgets.QPushButton("Delete the society with the status")
-        self.qpb_remove_layout.addWidget(self.qpb_remove_item)
+        self.qpb_import = QtWidgets.QPushButton("Import a list of society")
+        
+        self.qpb_remove_import_layout.addWidget(self.qpb_remove_item)
+        self.qpb_remove_import_layout.addWidget(self.qpb_import)
 
 
         #Label with the total number of society
@@ -86,7 +89,7 @@ class App(QtWidgets.QWidget, Candidapp):
         self.main_layout.addLayout(self.le_layout)
         self.main_layout.addLayout(self.qpb_add_layout)
         self.main_layout.addLayout(self.list_layout)
-        self.main_layout.addLayout(self.qpb_remove_layout)
+        self.main_layout.addLayout(self.qpb_remove_import_layout)
         self.main_layout.addLayout(self.total_layout)
 
         self.setLayout(self.main_layout)
