@@ -148,7 +148,7 @@ class App(QtWidgets.QWidget, Candidapp):
                 item = selected_item.data(QtCore.Qt.UserRole)
                 Candidapp.remove_society(self, item)
             except Warning:
-                    Candidapp.remove_society(self, item.title())
+                    Candidapp.remove_society(self, item)
 
             self.list_society.takeItem(self.list_society.row(selected_item))
             self.list_status.clear()
