@@ -132,11 +132,11 @@ class App(QtWidgets.QWidget, Candidapp):
             #Add the new item into the list & in the json file
             if self.society_instance.add_society():
                 society_text_item = QtWidgets.QListWidgetItem(society_text.title())
-                society_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
+                society_text_item.setData(QtCore.Qt.UserRole, society_text)
                 self.list_society.addItem(society_text_item)
 
                 status_text_item = QtWidgets.QListWidgetItem(status_text.title())
-                status_text_item.setData(QtCore.Qt.UserRole, self.society_instance)
+                status_text_item.setData(QtCore.Qt.UserRole, status_text)
                 self.list_status.addItem(status_text_item)
 
                 self.number_society = Candidapp.societys_sum(self)
@@ -144,8 +144,11 @@ class App(QtWidgets.QWidget, Candidapp):
 
     def remove_item(self):
         for selected_item in self.list_society.selectedItems():
-            item = selected_item.data(QtCore.Qt.UserRole)
-            Candidapp.remove_society(self, item)
+            try:
+                item = selected_item.data(QtCore.Qt.UserRole)
+                Candidapp.remove_society(self, item.title())
+            except Warning:
+                    Candidapp.remove_society(self, item)
 
             self.list_society.takeItem(self.list_society.row(selected_item))
             self.list_status.clear()

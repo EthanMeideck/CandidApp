@@ -15,11 +15,11 @@ class Candidapp:
         return f"{self.title} {self.status}"
 
     def _get_society(self):
-        with open(DATA_FILE, "r") as f:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def _write_society(self, new_dict):
-        with open(DATA_FILE, "w") as f:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
             return json.dump(new_dict, f, indent=4)
         
     def add_society(self):
@@ -47,12 +47,29 @@ class Candidapp:
         for _ in society_dict:
             numbers += 1
         return numbers
+    
+    def import_society(self, file):
+        society_dict = self._get_society()
+        society_dict.clear()
+        file = "C:/Users/ethan/OneDrive/Documents/PC-ETHAN/Alternance-Stage/2024-2025/Alternance/Entreprise_postulé.txt"
+        with open(file, "r", encoding="utf-8") as f:
+            for lines in f:
+                lines = lines.replace("\n", "")
+                lines = lines.replace("\t", "")
+                if "Refus" in lines:
+                    part = lines.split("Refus")
+                    society = part[0]
+                    society_dict[society.title()] = "Refus"
 
-#Importer depuis un fichier word ou txt
+                if not "Refus" in lines:
+                    society_dict[lines] = "Waiting"
+
+        self._write_society(society_dict)
 
 if __name__ == "__main__":
     c = Candidapp("test", "en attente")
     # c.add_society()
     # c.remove_society()
     # c.societys_sum()
-    # societys_sum()
+    # c.societys_sum()
+    # c.import_society("C:/Users/ethan/OneDrive/Documents/PC-ETHAN/Alternance-Stage/2024-2025/Alternance/Entreprise_postulé.txt")
