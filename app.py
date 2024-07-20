@@ -23,7 +23,8 @@ class App(QtWidgets.QWidget, Candidapp):
         self.le_layout = QtWidgets.QHBoxLayout()
         self.qpb_add_layout = QtWidgets.QVBoxLayout()
         self.list_layout = QtWidgets.QHBoxLayout()
-        self.qpb_remove_import_layout = QtWidgets.QVBoxLayout()
+        self.qpb_remove_clear_layout = QtWidgets.QHBoxLayout()
+        self.qpb_import_layout = QtWidgets.QVBoxLayout()
         self.total_layout = QtWidgets.QHBoxLayout()
 
         #Labels
@@ -63,14 +64,19 @@ class App(QtWidgets.QWidget, Candidapp):
         self.list_layout.addWidget(self.list_status)
         self.list_layout.setSpacing(0)
 
-        #QPushButton to remove and import items
+        #QPushButton to remove and clear items
 
         self.qpb_remove_item = QtWidgets.QPushButton("Delete the society with the status")
-        self.qpb_import = QtWidgets.QPushButton("Import a list of society")
+        self.qpb_clear_list = QtWidgets.QPushButton("Clear the list")
         
-        self.qpb_remove_import_layout.addWidget(self.qpb_remove_item)
-        self.qpb_remove_import_layout.addWidget(self.qpb_import)
+        self.qpb_remove_clear_layout.addWidget(self.qpb_remove_item)
+        self.qpb_remove_clear_layout.addWidget(self.qpb_clear_list)
 
+
+        #Import items
+
+        self.qpb_import = QtWidgets.QPushButton("Import a list of society")
+        self.qpb_import_layout.addWidget(self.qpb_import)
 
         #Label with the total number of society
 
@@ -89,7 +95,8 @@ class App(QtWidgets.QWidget, Candidapp):
         self.main_layout.addLayout(self.le_layout)
         self.main_layout.addLayout(self.qpb_add_layout)
         self.main_layout.addLayout(self.list_layout)
-        self.main_layout.addLayout(self.qpb_remove_import_layout)
+        self.main_layout.addLayout(self.qpb_remove_clear_layout)
+        self.main_layout.addLayout(self.qpb_import_layout)
         self.main_layout.addLayout(self.total_layout)
 
         self.setLayout(self.main_layout)
@@ -104,6 +111,12 @@ class App(QtWidgets.QWidget, Candidapp):
         self.message_box = QtWidgets.QMessageBox()
         self.message_box.setWindowTitle("Import report")
         self.message_box.setText("The file has been successfully import !")
+
+        #Clear confirmation
+
+        self.clear_message = QtWidgets.QMessageBox()
+        self.clear_message.setWindowTitle("Clear lists confirmation")
+        self.clear_message.setText("This action will delete all the list")
 
     #Add to each lists
 
@@ -185,14 +198,22 @@ class App(QtWidgets.QWidget, Candidapp):
 
         except PermissionError:
             logging.warn(" Select a text file")
+
+    def clear_list(self):
+        self.list_society.clear()
+        self.list_status.clear()
+
+        self.number_society = Candidapp.societys_sum(self)
+        self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)
-        self.le_society.returnPressed.connect(self.add_item)
-        self.le_status.returnPressed.connect(self.add_item)
-
         self.qpb_remove_item.clicked.connect(self.remove_item)
         self.qpb_import.clicked.connect(self.import_item)
+        self.qpb_clear_list.clicked.connect(self.clear_list)
+
+        self.le_society.returnPressed.connect(self.add_item)
+        self.le_status.returnPressed.connect(self.add_item)
         
 app = QtWidgets.QApplication([])
 win = App()
