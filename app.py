@@ -146,9 +146,9 @@ class App(QtWidgets.QWidget, Candidapp):
         for selected_item in self.list_society.selectedItems():
             try:
                 item = selected_item.data(QtCore.Qt.UserRole)
-                Candidapp.remove_society(self, item.title())
+                Candidapp.remove_society(self, item)
             except Warning:
-                    Candidapp.remove_society(self, item)
+                    Candidapp.remove_society(self, item.title())
 
             self.list_society.takeItem(self.list_society.row(selected_item))
             self.list_status.clear()
@@ -157,6 +157,9 @@ class App(QtWidgets.QWidget, Candidapp):
             self.number_society = Candidapp.societys_sum(self)
             self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
+    def import_item(self):
+        pass
+
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)
         self.le_society.returnPressed.connect(self.add_item)

@@ -72,4 +72,4 @@ if __name__ == "__main__":
     # c.remove_society()
     # c.societys_sum()
     # c.societys_sum()
-    # c.import_society("C:/Users/ethan/OneDrive/Documents/PC-ETHAN/Alternance-Stage/2024-2025/Alternance/Entreprise_postulé.txt")
+    # c.import_society("")
