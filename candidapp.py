@@ -51,8 +51,7 @@ class Candidapp:
     def import_society(self, file):
         society_dict = self._get_society()
         society_dict.clear()
-        file = "C:/Users/ethan/OneDrive/Documents/PC-ETHAN/Alternance-Stage/2024-2025/Alternance/Entreprise_postulé.txt"
-        with open(file, "r", encoding="utf-8") as f:
+        with open(file[0], "r", encoding="utf-8") as f:
             for lines in f:
                 lines = lines.replace("\n", "")
                 lines = lines.replace("\t", "")

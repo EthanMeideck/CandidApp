@@ -1,6 +1,6 @@
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtWidgets, QtCore, QtGui
 from candidapp import Candidapp
-import logging
+import logging, os
 
 class App(QtWidgets.QWidget, Candidapp):
     def __init__(self):
@@ -94,6 +94,17 @@ class App(QtWidgets.QWidget, Candidapp):
 
         self.setLayout(self.main_layout)
 
+        #File dialog part
+
+        self.file_selector = QtWidgets.QFileDialog(parent=self, 
+                                                caption="Select a file", 
+                                                directory=os.getcwd(), 
+                                                filter="Text file (*.txt *.docx)" )
+
+        self.message_box = QtWidgets.QMessageBox()
+        self.message_box.setWindowTitle("Import report")
+        self.message_box.setText("The file has been successfully import !")
+
     #Add to each lists
 
     def populate_name(self):
@@ -158,14 +169,30 @@ class App(QtWidgets.QWidget, Candidapp):
             self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
     def import_item(self):
-        pass
+        self.file_selector.exec_()
+        selected_file = self.file_selector.selectedFiles()
+        try:
+            if selected_file:
+                Candidapp.import_society(self, selected_file)
+            
+                self.populate_name()
+                self.populate_status()
 
+                self.number_society = Candidapp.societys_sum(self)
+                self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+
+                self.message_box.exec_()
+
+        except PermissionError:
+            logging.warn(" Select a text file")
+            
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)
         self.le_society.returnPressed.connect(self.add_item)
         self.le_status.returnPressed.connect(self.add_item)
 
         self.qpb_remove_item.clicked.connect(self.remove_item)
+        self.qpb_import.clicked.connect(self.import_item)
         
 app = QtWidgets.QApplication([])
 win = App()
