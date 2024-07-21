@@ -15,7 +15,7 @@ class Candidapp:
         return f"{self.title} {self.status}"
 
     def _get_society(self):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
+        with open(DATA_FILE, "r") as f:
             return json.load(f)
 
     def _write_society(self, new_dict):
@@ -51,10 +51,12 @@ class Candidapp:
     def import_society(self, file):
         society_dict = self._get_society()
         society_dict.clear()
+        
         with open(file[0], "r", encoding="utf-8") as f:
             for lines in f:
                 lines = lines.replace("\n", "")
                 lines = lines.replace("\t", "")
+        
                 if "Refus" in lines:
                     part = lines.split("Refus")
                     society = part[0]
@@ -65,6 +67,11 @@ class Candidapp:
 
         self._write_society(society_dict)
 
+    def clear_society(self):
+        society_dict = self._get_society()
+        society_dict.clear()
+        self._write_society(society_dict)
+
 if __name__ == "__main__":
     c = Candidapp("test", "en attente")
     # c.add_society()
@@ -72,3 +79,4 @@ if __name__ == "__main__":
     # c.societys_sum()
     # c.societys_sum()
     # c.import_society("")
+    # c.clear_society()
