@@ -148,16 +148,22 @@ class App(QtWidgets.QWidget, Candidapp):
 
             #Add the new item into the list & in the json file
             if self.society_instance.add_society():
+                row_position = self.list_society.rowCount()
+                self.list_society.insertRow(row_position)
+
                 society_text_item = QtWidgets.QTableWidgetItem(society_text.title())
                 society_text_item.setData(QtCore.Qt.UserRole, society_text)
-                self.list_society.setItem(self.row_position, 0, society_text_item)
+                self.list_society.setItem(row_position, 0, society_text_item)
 
                 status_text_item = QtWidgets.QTableWidgetItem(status_text.title())
                 status_text_item.setData(QtCore.Qt.UserRole, status_text)
-                self.list_society.setItem(self.row_position, 1, status_text_item)
+                self.list_society.setItem(row_position, 1, status_text_item)
 
                 self.number_society = Candidapp.societys_sum(self)
                 self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+
+                self.le_society.clear()
+                self.le_status.clear()
 
     def remove_item(self):
         for selected_item in self.list_society.selectedItems():
