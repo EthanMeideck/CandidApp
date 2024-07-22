@@ -57,7 +57,7 @@ class App(QtWidgets.QWidget, Candidapp):
         self.list_society.setColumnCount(2)
         self.list_society.setHorizontalHeaderLabels(["Society", "Status"])
 
-        # self.list_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
+        self.list_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
 
         self.list_layout.addWidget(self.list_society)
 
@@ -170,11 +170,18 @@ class App(QtWidgets.QWidget, Candidapp):
             try:
                 item = selected_item.data(QtCore.Qt.UserRole)
                 row = self.list_society.currentRow()
-                
+
                 self.list_society.removeRow(row)
-                Candidapp.remove_society(self, item.title())
+                Candidapp.remove_society(self, item)
+            
             except Warning:
-                    Candidapp.remove_society(self, item)
+                    Candidapp.remove_society(self, item.title())
+            
+            except RuntimeError:
+                self.list_society.clearContents()
+                self.list_society.setRowCount(0)
+                self.populate_table()
+                
 
             self.number_society = Candidapp.societys_sum(self)
             self.text_total.setText(f"You applied for {self.number_society} differents jobs")
