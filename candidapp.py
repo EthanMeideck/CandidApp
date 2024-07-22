@@ -56,7 +56,7 @@ class Candidapp:
             for lines in f:
                 lines = lines.replace("\n", "")
                 lines = lines.replace("\t", "")
-        
+                
                 if "Refus" in lines:
                     part = lines.split("Refus")
                     society = part[0]

@@ -109,21 +109,23 @@ class App(QtWidgets.QWidget, Candidapp):
     #Add to each lists
 
     def populate_table(self):
-        self.society_name = Candidapp._get_society(self)
-        for name in self.society_name:
-            row_position = self.list_society.rowCount()
-            self.list_society.insertRow(row_position)
-            name_list_item = QtWidgets.QTableWidgetItem(name) #Create item
-            name_list_item.setData(QtCore.Qt.UserRole, name) #Setting item's data
-            self.list_society.setItem(row_position, 0, name_list_item) #Add to the list
-            
-        row_position += 1
+        try:
+            self.society_name = Candidapp._get_society(self)
+            for name, status in self.society_name.items():
+                row_position = self.list_society.rowCount()
+                self.list_society.insertRow(row_position)
+                
+                name_list_item = QtWidgets.QTableWidgetItem(name) #Create item
+                name_list_item.setData(QtCore.Qt.UserRole, name) #Setting item's data
+                self.list_society.setItem(row_position, 0, name_list_item) #Add to the list
 
-        for status in self.society_name.values():
-            row_position -= 1
-            status_list_item = QtWidgets.QTableWidgetItem(status)
-            status_list_item.setData(QtCore.Qt.UserRole, status)
-            self.list_society.setItem(row_position, 1, status_list_item)
+                status_list_item = QtWidgets.QTableWidgetItem(status)
+                status_list_item.setData(QtCore.Qt.UserRole, status)
+                self.list_society.setItem(row_position, 1, status_list_item)
+                                
+                
+        except UnboundLocalError:
+            logging.info("The table is empty.")
 
     def add_item(self):
         self.society_dict = Candidapp._get_society(self)
@@ -179,7 +181,6 @@ class App(QtWidgets.QWidget, Candidapp):
                 Candidapp.import_society(self, selected_file)
             
                 self.populate_table()
-                self.populate_status()
 
                 self.number_society = Candidapp.societys_sum(self)
                 self.text_total.setText(f"You applied for {self.number_society} differents jobs")
