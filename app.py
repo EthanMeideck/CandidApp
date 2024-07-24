@@ -31,9 +31,9 @@ class App(QtWidgets.QWidget, Candidapp):
         self.text_society = QtWidgets.QLabel("Society name")
         self.text_status = QtWidgets.QLabel("Status")
 
-        self.text_layout.addSpacerItem(QtWidgets.QSpacerItem(67, 0))
+        self.text_layout.addSpacerItem(QtWidgets.QSpacerItem(23, 0))
         self.text_layout.addWidget(self.text_society)
-        self.text_layout.addSpacerItem(QtWidgets.QSpacerItem(160, 0))
+        self.text_layout.addSpacerItem(QtWidgets.QSpacerItem(110, 0))
         self.text_layout.addWidget(self.text_status)
 
         #Line edit 
@@ -48,23 +48,21 @@ class App(QtWidgets.QWidget, Candidapp):
         #QPushButton to add items
 
         self.qpb_add_item = QtWidgets.QPushButton("Add the society with the status")
-
         self.qpb_add_layout.addWidget(self.qpb_add_item)
 
-        #List with society and status
+        #Table with society and status
 
-        self.list_society = QtWidgets.QTableWidget()
-        self.list_society.setColumnCount(2)
-        self.list_society.setHorizontalHeaderLabels(["Society", "Status"])
+        self.table_society = QtWidgets.QTableWidget()
+        self.table_society.setColumnCount(2)
+        self.table_society.setHorizontalHeaderLabels(["Society", "Status"])
 
-        self.list_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
+        self.table_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
 
-        self.list_layout.addWidget(self.list_society)
+        self.list_layout.addWidget(self.table_society)
 
         #QPushButton to remove and clear items
 
         self.qpb_remove_item = QtWidgets.QPushButton("Delete the society with the status")
-        
         self.qpb_remove_layout.addWidget(self.qpb_remove_item)
 
         #Import items
@@ -75,7 +73,6 @@ class App(QtWidgets.QWidget, Candidapp):
         #Label with the total number of society
 
         self.number_society = Candidapp.societys_sum(self)
-
         self.text_total = QtWidgets.QLabel(f"You applied for {self.number_society} differents jobs")
 
         self.total_layout.addWidget(self.text_total)
@@ -106,23 +103,30 @@ class App(QtWidgets.QWidget, Candidapp):
         self.message_box.setWindowTitle("Import report")
         self.message_box.setText("The file has been successfully import !")
 
-    #Add to each lists
+    def setup_connection(self):
+        self.qpb_add_item.clicked.connect(self.add_item)
+        self.qpb_remove_item.clicked.connect(self.remove_item)
+        self.qpb_import.clicked.connect(self.import_item)
+
+        self.le_society.returnPressed.connect(self.add_item)
+        self.le_status.returnPressed.connect(self.add_item)
+
+    #Add to table
 
     def populate_table(self):
         try:
             self.society_name = Candidapp._get_society(self)
             for name, status in self.society_name.items():
-                row_position = self.list_society.rowCount()
-                self.list_society.insertRow(row_position)
+                row_position = self.table_society.rowCount()
+                self.table_society.insertRow(row_position)
                 
                 name_list_item = QtWidgets.QTableWidgetItem(name) #Create item
                 name_list_item.setData(QtCore.Qt.UserRole, name) #Setting item's data
-                self.list_society.setItem(row_position, 0, name_list_item) #Add to the list
+                self.table_society.setItem(row_position, 0, name_list_item) #Add to the list
 
                 status_list_item = QtWidgets.QTableWidgetItem(status)
                 status_list_item.setData(QtCore.Qt.UserRole, status)
-                self.list_society.setItem(row_position, 1, status_list_item)
-                                
+                self.table_society.setItem(row_position, 1, status_list_item)                    
                 
         except UnboundLocalError:
             logging.info("The table is empty.")
@@ -148,36 +152,35 @@ class App(QtWidgets.QWidget, Candidapp):
 
             #Add the new item into the list & in the json file
             if self.society_instance.add_society():
-                row_position = self.list_society.rowCount()
-                self.list_society.insertRow(row_position)
+                row_position = self.table_society.rowCount()
+                self.table_society.insertRow(row_position)
 
                 society_text_item = QtWidgets.QTableWidgetItem(society_text.title())
                 society_text_item.setData(QtCore.Qt.UserRole, society_text)
-                self.list_society.setItem(row_position, 0, society_text_item)
+                self.table_society.setItem(row_position, 0, society_text_item)
 
                 status_text_item = QtWidgets.QTableWidgetItem(status_text.title())
                 status_text_item.setData(QtCore.Qt.UserRole, status_text)
-                self.list_society.setItem(row_position, 1, status_text_item)
+                self.table_society.setItem(row_position, 1, status_text_item)
 
                 self.refresh_sum()
-
                 self.le_society.clear()
                 self.le_status.clear()
 
     def remove_item(self):
-        for selected_item in self.list_society.selectedItems():
+        for selected_item in self.table_society.selectedItems():
             try:
                 item = selected_item.data(QtCore.Qt.UserRole)
-                row = self.list_society.currentRow()
+                row = self.table_society.currentRow()
 
-                self.list_society.removeRow(row)
+                self.table_society.removeRow(row)
                 Candidapp.remove_society(self, item.title())
             except ValueError:
                     Candidapp.remove_society(self, item)
             
             except RuntimeError:
-                self.list_society.clearContents()
-                self.list_society.setRowCount(0)
+                self.table_society.clearContents()
+                self.table_society.setRowCount(0)
                 self.populate_table()
                 
         self.refresh_sum()
@@ -200,14 +203,6 @@ class App(QtWidgets.QWidget, Candidapp):
     def refresh_sum(self):
         self.number_society = Candidapp.societys_sum(self)
         self.text_total.setText(f"You applied for {self.number_society} differents jobs")
-            
-    def setup_connection(self):
-        self.qpb_add_item.clicked.connect(self.add_item)
-        self.qpb_remove_item.clicked.connect(self.remove_item)
-        self.qpb_import.clicked.connect(self.import_item)
-
-        self.le_society.returnPressed.connect(self.add_item)
-        self.le_status.returnPressed.connect(self.add_item)
         
 app = QtWidgets.QApplication([])
 win = App()

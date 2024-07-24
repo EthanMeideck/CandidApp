@@ -41,10 +41,8 @@ class Candidapp:
             raise ValueError
 
     def societys_sum(self):
-        with open(DATA_FILE, "r") as f:
-            society_dict = json.load(f)
         numbers = 0
-        for _ in society_dict:
+        for _ in self._get_society():
             numbers += 1
         return numbers
     
@@ -66,12 +64,3 @@ class Candidapp:
                     society_dict[lines] = "Waiting"
 
         self._write_society(society_dict)
-
-if __name__ == "__main__":
-    c = Candidapp("test", "en attente")
-    # c.add_society()
-    # c.remove_society()
-    # c.societys_sum()
-    # c.societys_sum()
-    # c.import_society("")
-    # c.clear_society()
