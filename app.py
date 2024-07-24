@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets, QtCore, QtGui
+from PySide2 import QtWidgets, QtCore
 from candidapp import Candidapp
 import logging, os
 
@@ -159,8 +159,7 @@ class App(QtWidgets.QWidget, Candidapp):
                 status_text_item.setData(QtCore.Qt.UserRole, status_text)
                 self.list_society.setItem(row_position, 1, status_text_item)
 
-                self.number_society = Candidapp.societys_sum(self)
-                self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+                self.refresh_sum()
 
                 self.le_society.clear()
                 self.le_status.clear()
@@ -172,19 +171,16 @@ class App(QtWidgets.QWidget, Candidapp):
                 row = self.list_society.currentRow()
 
                 self.list_society.removeRow(row)
-                Candidapp.remove_society(self, item)
-            
-            except Warning:
-                    Candidapp.remove_society(self, item.title())
+                Candidapp.remove_society(self, item.title())
+            except ValueError:
+                    Candidapp.remove_society(self, item)
             
             except RuntimeError:
                 self.list_society.clearContents()
                 self.list_society.setRowCount(0)
                 self.populate_table()
                 
-
-            self.number_society = Candidapp.societys_sum(self)
-            self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+        self.refresh_sum()
             
     def import_item(self):
         self.file_selector.exec_()
@@ -194,14 +190,16 @@ class App(QtWidgets.QWidget, Candidapp):
                 Candidapp.import_society(self, selected_file)
             
                 self.populate_table()
-
-                self.number_society = Candidapp.societys_sum(self)
-                self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+                self.refresh_sum()
 
                 self.message_box.exec_()
 
         except PermissionError:
             logging.warn(" Select a text file")
+
+    def refresh_sum(self):
+        self.number_society = Candidapp.societys_sum(self)
+        self.text_total.setText(f"You applied for {self.number_society} differents jobs")
             
     def setup_connection(self):
         self.qpb_add_item.clicked.connect(self.add_item)

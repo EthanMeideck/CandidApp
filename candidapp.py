@@ -38,7 +38,7 @@ class Candidapp:
             self._write_society(society_dict)
             return True
         else:
-            logging.warning(" The society is not in the data base.")
+            raise ValueError
 
     def societys_sum(self):
         with open(DATA_FILE, "r") as f:
@@ -56,7 +56,7 @@ class Candidapp:
             for lines in f:
                 lines = lines.replace("\n", "")
                 lines = lines.replace("\t", "")
-                
+
                 if "Refus" in lines:
                     part = lines.split("Refus")
                     society = part[0]
@@ -65,11 +65,6 @@ class Candidapp:
                 if not "Refus" in lines:
                     society_dict[lines] = "Waiting"
 
-        self._write_society(society_dict)
-
-    def clear_society(self):
-        society_dict = self._get_society()
-        society_dict.clear()
         self._write_society(society_dict)
 
 if __name__ == "__main__":
