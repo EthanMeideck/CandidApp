@@ -115,7 +115,7 @@ class App(QtWidgets.QWidget, Candidapp):
 
     def populate_table(self):
         try:
-            self.society_name = Candidapp._get_society(self)
+            self.society_name = Candidapp.get_society(self)
             for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
@@ -132,7 +132,7 @@ class App(QtWidgets.QWidget, Candidapp):
             logging.info("The table is empty.")
 
     def add_item(self):
-        self.society_dict = Candidapp._get_society(self)
+        self.society_dict = Candidapp.get_society(self)
 
         #Picking the text in each line edit 
         society_text = self.le_society.text()
