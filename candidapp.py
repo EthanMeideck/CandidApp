@@ -58,7 +58,17 @@ class Candidapp:
                     society = part[0]
                     society_dict[society.title()] = "Refus"
 
-                if not "Refus" in lines:
+                elif "Entretien" in lines:
+                    part = lines.split("Entretien")
+                    society = part[0]
+                    society_dict[society.title()] = "Entretien"
+                
+                elif "Accepté" in lines:
+                    part = lines.split("Accepté")
+                    society = part[0]
+                    society_dict[society.title()] = "Accepté"
+                        
+                elif not "Refus" in lines:
                     society_dict[lines] = "Waiting"
 
         self.write_society(society_dict)
