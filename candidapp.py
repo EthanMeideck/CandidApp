@@ -3,7 +3,7 @@ import os, json, logging
 CUR_DIR = os.path.dirname(__file__)
 DATA_FILE = os.path.join(CUR_DIR, "data", "data.json")
 
-class Candidapp:
+class Society:
 
     def __init__(self, title, status):
         self.title = title.title()
@@ -12,40 +12,40 @@ class Candidapp:
     def __str__(self):
         return f"{self.title} {self.status}"
 
-    def get_society(self):
+    def get(self):
         with open(DATA_FILE, "r") as f:
             return json.load(f)
 
-    def write_society(self, new_dict):
+    def write(self, new_dict):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             return json.dump(new_dict, f, indent=4)
         
-    def add_society(self):
-        society_dict = self.get_society()
+    def add(self):
+        society_dict = self.get()
         if self.title not in society_dict:
             society_dict[self.title] = self.status
-            self.write_society(society_dict)
+            self.write(society_dict)
             return True
         else:
             logging.warning(" The society is already in the data base.")
 
-    def remove_society(self, title):
-        society_dict = self.get_society()
+    def remove(self, title):
+        society_dict = self.get()
         if title in society_dict:
             del society_dict[title]
-            self.write_society(society_dict)
+            self.write(society_dict)
             return True
         else:
             raise ValueError
 
-    def societys_sum(self):
+    def sum_(self):
         numbers = 0
-        for _ in self.get_society():
+        for _ in self.get():
             numbers += 1
         return numbers
     
-    def import_society(self, file):
-        society_dict = self.get_society()
+    def import_(self, file):
+        society_dict = self.get()
         society_dict.clear()
         
         with open(file[0], "r", encoding="utf-8") as f:
@@ -71,4 +71,4 @@ class Candidapp:
                 elif not "Refus" in lines:
                     society_dict[lines] = "Waiting"
 
-        self.write_society(society_dict)
+        self.write(society_dict)

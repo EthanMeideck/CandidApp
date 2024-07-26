@@ -1,8 +1,8 @@
 from PySide2 import QtWidgets, QtCore
-from candidapp import Candidapp
+from candidapp import Society
 import logging, os
 
-class App(QtWidgets.QWidget, Candidapp):
+class App(QtWidgets.QWidget, Society):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("CandidApp")
@@ -72,7 +72,7 @@ class App(QtWidgets.QWidget, Candidapp):
 
         #Label with the total number of society
 
-        self.number_society = Candidapp.societys_sum(self)
+        self.number_society = Society.sum_(self)
         self.text_total = QtWidgets.QLabel(f"You applied for {self.number_society} differents jobs")
 
         self.total_layout.addWidget(self.text_total)
@@ -115,7 +115,7 @@ class App(QtWidgets.QWidget, Candidapp):
 
     def populate_table(self):
         try:
-            self.society_name = Candidapp.get_society(self)
+            self.society_name = Society.get(self)
             for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
@@ -132,7 +132,7 @@ class App(QtWidgets.QWidget, Candidapp):
             logging.info("The table is empty.")
 
     def add_item(self):
-        self.society_dict = Candidapp.get_society(self)
+        self.society_dict = Society.get(self)
 
         #Picking the text in each line edit 
         society_text = self.le_society.text()
@@ -148,10 +148,10 @@ class App(QtWidgets.QWidget, Candidapp):
         if society_text and status_text:
 
             #creating a new instance
-            self.society_instance = Candidapp(title=society_text, status=status_text)
+            self.society_instance = Society(title=society_text, status=status_text)
 
             #Add the new item into the list & in the json file
-            if self.society_instance.add_society():
+            if self.society_instance.add():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
 
@@ -174,9 +174,9 @@ class App(QtWidgets.QWidget, Candidapp):
                 row = self.table_society.currentRow()
 
                 self.table_society.removeRow(row)
-                Candidapp.remove_society(self, item.title())
+                Society.remove(self, item.title())
             except ValueError:
-                    Candidapp.remove_society(self, item)
+                    Society.remove(self, item)
             
             except RuntimeError:
                 self.table_society.clearContents()
@@ -190,7 +190,7 @@ class App(QtWidgets.QWidget, Candidapp):
         selected_file = self.file_selector.selectedFiles()
         try:
             if selected_file:
-                Candidapp.import_society(self, selected_file)
+                Society.import_(self, selected_file)
             
                 self.populate_table()
                 self.refresh_sum()
@@ -201,7 +201,7 @@ class App(QtWidgets.QWidget, Candidapp):
             logging.warn(" Select a text file")
 
     def refresh_sum(self):
-        self.number_society = Candidapp.societys_sum(self)
+        self.number_society = Society.sum_(self)
         self.text_total.setText(f"You applied for {self.number_society} differents jobs")
         
 app = QtWidgets.QApplication([])
