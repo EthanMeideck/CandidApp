@@ -26,6 +26,9 @@ class App(QtWidgets.QWidget, Society):
         self.qpb_import_layout = QtWidgets.QVBoxLayout()
         self.total_layout = QtWidgets.QHBoxLayout()
 
+        list_all_layout = [self.text_layout, self.le_layout, self.qpb_add_layout, self.list_layout, 
+                           self.qpb_remove_layout, self.qpb_import_layout, self.total_layout]
+       
         #Labels
 
         self.text_society = QtWidgets.QLabel("Society name")
@@ -82,13 +85,8 @@ class App(QtWidgets.QWidget, Society):
 
         #Adding secondary layout to the main layout
 
-        self.main_layout.addLayout(self.text_layout)
-        self.main_layout.addLayout(self.le_layout)
-        self.main_layout.addLayout(self.qpb_add_layout)
-        self.main_layout.addLayout(self.list_layout)
-        self.main_layout.addLayout(self.qpb_remove_layout)
-        self.main_layout.addLayout(self.qpb_import_layout)
-        self.main_layout.addLayout(self.total_layout)
+        for layout in list_all_layout:
+            self.main_layout.addLayout(layout)
 
         self.setLayout(self.main_layout)
 

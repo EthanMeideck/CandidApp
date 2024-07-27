@@ -68,7 +68,7 @@ class Society:
                     society = part[0]
                     society_dict[society.title()] = "Accepté"
                         
-                elif not "Refus" in lines:
+                else:
                     society_dict[lines] = "Waiting"
 
         self.write(society_dict)
