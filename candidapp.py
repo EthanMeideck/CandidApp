@@ -75,7 +75,3 @@ class Society:
                     society_dict[lines] = "Waiting"
 
         self.write(society_dict)
-
-if __name__ == "__main__":
-    c = Society("t", "t")
-    c.sum_()
