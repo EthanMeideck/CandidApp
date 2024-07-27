@@ -1,4 +1,6 @@
-import os, json, logging
+import os
+import json
+import logging
 
 CUR_DIR = os.path.dirname(__file__)
 DATA_FILE = os.path.join(CUR_DIR, "data", "data.json")
@@ -8,12 +10,13 @@ class Society:
     def __init__(self, title, status):
         self.title = title.title()
         self.status = status.title()
+        self.society_dict = self.get()
 
     def __str__(self):
         return f"{self.title} {self.status}"
 
     def get(self):
-        with open(DATA_FILE, "r") as f:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def write(self, new_dict):
@@ -21,10 +24,9 @@ class Society:
             return json.dump(new_dict, f, indent=4)
         
     def add(self):
-        society_dict = self.get()
-        if self.title not in society_dict:
-            society_dict[self.title] = self.status
-            self.write(society_dict)
+        if self.title not in self.society_dict:
+            self.society_dict[self.title] = self.status
+            self.write(self.society_dict)
             return True
         else:
             logging.warning(" The society is already in the data base.")

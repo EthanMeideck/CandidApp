@@ -1,9 +1,11 @@
 from PySide2 import QtWidgets, QtCore
 from candidapp import Society
-import logging, os
+import logging
+import os
 
 class App(QtWidgets.QWidget, Society):
     def __init__(self):
+        self.society_name = Society.get(self)
         super().__init__()
         self.setWindowTitle("CandidApp")
         self.setup_ui()
@@ -57,7 +59,7 @@ class App(QtWidgets.QWidget, Society):
 
         self.table_society = QtWidgets.QTableWidget()
         self.table_society.setColumnCount(2)
-        self.table_society.setHorizontalHeaderLabels(["Society", "Status"])
+        self.table_society.setHorizontalHeaderLabels(("Society", "Status"))
 
         self.table_society.setSelectionMode(QtWidgets.QListWidget.ExtendedSelection)
 
@@ -113,7 +115,6 @@ class App(QtWidgets.QWidget, Society):
 
     def populate_table(self):
         try:
-            self.society_name = Society.get(self)
             for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
@@ -130,8 +131,6 @@ class App(QtWidgets.QWidget, Society):
             logging.info("The table is empty.")
 
     def add_item(self):
-        self.society_dict = Society.get(self)
-
         #Picking the text in each line edit 
         society_text = self.le_society.text()
         status_text = self.le_status.text()
