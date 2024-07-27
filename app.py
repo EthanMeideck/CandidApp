@@ -115,7 +115,13 @@ class App(QtWidgets.QWidget, Society):
 
     def populate_table(self):
         try:
-            for name, status in self.society_name.items():
+            self.add_table_item()                    
+
+        except UnboundLocalError:
+            logging.info("The table is empty.")
+
+    def add_table_item(self):
+        for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
                 
@@ -125,10 +131,7 @@ class App(QtWidgets.QWidget, Society):
 
                 status_list_item = QtWidgets.QTableWidgetItem(status)
                 status_list_item.setData(QtCore.Qt.UserRole, status)
-                self.table_society.setItem(row_position, 1, status_list_item)                    
-                
-        except UnboundLocalError:
-            logging.info("The table is empty.")
+                self.table_society.setItem(row_position, 1, status_list_item)
 
     def add_item(self):
         #Picking the text in each line edit 
@@ -176,8 +179,7 @@ class App(QtWidgets.QWidget, Society):
                     Society.remove(self, item)
             
             except RuntimeError:
-                self.table_society.clearContents()
-                self.table_society.setRowCount(0)
+                self.clear_table()
                 self.populate_table()
                 
         self.refresh_sum()
@@ -189,6 +191,7 @@ class App(QtWidgets.QWidget, Society):
             if selected_file:
                 Society.import_(self, selected_file)
             
+                self.clear_table()
                 self.populate_table()
                 self.refresh_sum()
 
@@ -200,6 +203,10 @@ class App(QtWidgets.QWidget, Society):
     def refresh_sum(self):
         self.number_society = Society.sum_(self)
         self.text_total.setText(f"You applied for {self.number_society} differents jobs")
+
+    def clear_table(self):
+        self.table_society.clearContents()
+        self.table_society.setRowCount(0)
         
 app = QtWidgets.QApplication([])
 win = App()
