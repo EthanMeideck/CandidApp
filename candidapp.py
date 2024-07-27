@@ -39,10 +39,12 @@ class Society:
             raise ValueError
 
     def sum_(self):
-        numbers = 0
-        for _ in self.get():
-            numbers += 1
-        return numbers
+        try:
+            for society in enumerate(self.get(), 1):
+                numbers = society[0]
+            return numbers
+        except UnboundLocalError:
+            return 0
     
     def import_(self, file):
         society_dict = self.get()
@@ -72,3 +74,7 @@ class Society:
                     society_dict[lines] = "Waiting"
 
         self.write(society_dict)
+
+if __name__ == "__main__":
+    c = Society("t", "t")
+    c.sum_()
