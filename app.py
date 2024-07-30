@@ -1,11 +1,11 @@
-from PySide2 import QtWidgets, QtCore
-from candidapp import Society
 import logging
 import os
+from PySide2 import QtWidgets, QtCore
+from candidapp import Society
 
 class App(QtWidgets.QWidget, Society):
     def __init__(self):
-        self.society_name = Society.get(self)
+        self.society_name = Society.get_society(self)
         super().__init__()
         self.setWindowTitle("CandidApp")
         self.setup_ui()
@@ -77,7 +77,7 @@ class App(QtWidgets.QWidget, Society):
 
         #Label with the total number of society
 
-        self.number_society = Society.sum_(self)
+        self.number_society = Society.society_sum(self)
         self.text_total = QtWidgets.QLabel(f"You applied for {self.number_society} differents jobs")
 
         self.total_layout.addWidget(self.text_total)
@@ -115,12 +115,13 @@ class App(QtWidgets.QWidget, Society):
 
     def populate_table(self):
         try:
-            self.add_table_item()                    
+            self.add_table_item()                
 
         except UnboundLocalError:
             logging.info("The table is empty.")
 
     def add_table_item(self):
+        self.society_name = Society.get_society(self)
         for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
@@ -151,7 +152,7 @@ class App(QtWidgets.QWidget, Society):
             self.society_instance = Society(title=society_text, status=status_text)
 
             #Add the new item into the list & in the json file
-            if self.society_instance.add():
+            if self.society_instance.add_society():
                 row_position = self.table_society.rowCount()
                 self.table_society.insertRow(row_position)
 
@@ -174,10 +175,8 @@ class App(QtWidgets.QWidget, Society):
                 row = self.table_society.currentRow()
 
                 self.table_society.removeRow(row)
-                Society.remove(self, item.title())
-            except ValueError:
-                    Society.remove(self, item)
-            
+                Society.remove_society(self, item.title())
+
             except RuntimeError:
                 self.clear_table()
                 self.populate_table()
@@ -189,7 +188,7 @@ class App(QtWidgets.QWidget, Society):
         selected_file = self.file_selector.selectedFiles()
         try:
             if selected_file:
-                Society.import_(self, selected_file)
+                Society.import_society(self, selected_file)
             
                 self.clear_table()
                 self.populate_table()
@@ -200,8 +199,10 @@ class App(QtWidgets.QWidget, Society):
         except PermissionError:
             logging.warn(" Select a text file")
 
+        selected_file.clear()
+
     def refresh_sum(self):
-        self.number_society = Society.sum_(self)
+        self.number_society = Society.society_sum(self)
         self.text_total.setText(f"You applied for {self.number_society} differents jobs")
 
     def clear_table(self):
