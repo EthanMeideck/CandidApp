@@ -6,7 +6,6 @@ CUR_DIR = os.path.dirname(__file__)
 DATA_FILE = os.path.join(CUR_DIR, "data", "data.json")
 
 class Society:
-
     def __init__(self, title, status):
         self.title = title.title()
         self.status = status.title()

@@ -28,8 +28,8 @@ class App(QtWidgets.QWidget, Society):
         self.qpb_import_layout = QtWidgets.QVBoxLayout()
         self.total_layout = QtWidgets.QHBoxLayout()
 
-        list_all_layout = [self.text_layout, self.le_layout, self.qpb_add_layout, self.list_layout, 
-                           self.qpb_remove_layout, self.qpb_import_layout, self.total_layout]
+        list_all_layout = (self.text_layout, self.le_layout, self.qpb_add_layout, self.list_layout, 
+                           self.qpb_remove_layout, self.qpb_import_layout, self.total_layout)
        
         #Labels
 
@@ -115,7 +115,7 @@ class App(QtWidgets.QWidget, Society):
 
     def populate_table(self):
         try:
-            self.add_table_item()                
+            self.add_table_item()
 
         except UnboundLocalError:
             logging.info("The table is empty.")
@@ -143,7 +143,7 @@ class App(QtWidgets.QWidget, Society):
             logging.warning(" Enter a valid society name.")
             return False
         
-        if not status_text:
+        elif not status_text:
             status_text = "Waiting"
 
         if society_text and status_text:
@@ -197,7 +197,7 @@ class App(QtWidgets.QWidget, Society):
                 self.message_box.exec_()
 
         except PermissionError:
-            logging.warn(" Select a text file")
+            logging.warning(" Select a text file")
 
         selected_file.clear()
 
