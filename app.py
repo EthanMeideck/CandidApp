@@ -114,13 +114,6 @@ class App(QtWidgets.QWidget, Society):
     #Add to table
 
     def populate_table(self):
-        try:
-            self.add_table_item()
-    
-        except UnboundLocalError:
-            logging.info("The table is empty.")
-
-    def add_table_item(self):
         self.society_name = Society.get_society(self)
         for name, status in self.society_name.items():
                 row_position = self.table_society.rowCount()
@@ -132,7 +125,7 @@ class App(QtWidgets.QWidget, Society):
 
                 status_list_item = QtWidgets.QTableWidgetItem(status)
                 status_list_item.setData(QtCore.Qt.UserRole, status)
-                self.table_society.setItem(row_position, 1, status_list_item)
+                self.table_society.setItem(row_position, 1, status_list_item)        
 
     def add_item(self):
         #Picking the text in each line edit 
