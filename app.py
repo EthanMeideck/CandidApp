@@ -116,7 +116,7 @@ class App(QtWidgets.QWidget, Society):
     def populate_table(self):
         try:
             self.add_table_item()
-
+    
         except UnboundLocalError:
             logging.info("The table is empty.")
 
@@ -142,7 +142,7 @@ class App(QtWidgets.QWidget, Society):
         if not society_text:
             logging.warning(" Enter a valid society name.")
             return False
-        
+
         elif not status_text:
             status_text = "Waiting"
 
@@ -186,6 +186,7 @@ class App(QtWidgets.QWidget, Society):
     def import_item(self):
         self.file_selector.exec_()
         selected_file = self.file_selector.selectedFiles()
+        print(type(selected_file))
         try:
             if selected_file:
                 Society.import_society(self, selected_file)
