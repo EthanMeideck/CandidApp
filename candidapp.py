@@ -37,12 +37,12 @@ class Society:
             return True
 
     def society_sum(self) -> int:
-        try:
+        if self.get_society():
             for society in enumerate(self.get_society(), 1): 
                 numbers = society[0]
-            return numbers
-        except UnboundLocalError:
+        else:
             return 0
+        return numbers
     
     def import_society(self, file:list):
         society_dict = self.get_society()
